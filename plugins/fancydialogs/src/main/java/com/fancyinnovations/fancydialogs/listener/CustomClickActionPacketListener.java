@@ -45,8 +45,6 @@ public class CustomClickActionPacketListener {
         /*if (!packet.getId().namespace().equals("fancysitula") && !packet.getId().namespace().equals("fancydialogs_dialog_action")) {
             return; // Ignore packets not related to FancyDialogs
         }*/
-        FancyDialogsPlugin.get().getFancyLogger().debug("found packet " + event.packet().getType());
-        FancyDialogsPlugin.get().getFancyLogger().debug("found packet " + event.packet().toString());
 
         packet.getPayload().forEach((key, value) -> {
             FancyDialogsPlugin.get().getFancyLogger().debug("Click action data Key: " + key + " value: " + value.toString());

@@ -42,7 +42,6 @@ public class PacketListenerImpl extends FS_PacketListener {
             protected void decode(ChannelHandlerContext ctx, Packet<?> msg, List<Object> out) {
                 out.add(msg);
 
-                Bukkit.getLogger().info("found packet " + msg.toString());
                 FS_ServerboundPacket.Type packetType = getPacketType(msg);
                 if (packetType == null) {
                     return; // Unsupported packet type
