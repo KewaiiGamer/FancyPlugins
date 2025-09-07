@@ -15,7 +15,7 @@ import de.oliver.fancysitula.api.dialogs.actions.FS_CommonButtonData;
 import de.oliver.fancysitula.api.dialogs.actions.FS_DialogActionButton;
 import de.oliver.fancysitula.api.dialogs.actions.FS_DialogCustomAction;
 import de.oliver.fancysitula.api.dialogs.body.FS_DialogBody;
-import de.oliver.fancysitula.api.dialogs.body.FS_DialogClickEvent;
+import de.oliver.fancysitula.api.dialogs.body.FS_DialogItemBody;
 import de.oliver.fancysitula.api.dialogs.body.FS_DialogTextBody;
 import de.oliver.fancysitula.api.dialogs.inputs.*;
 import de.oliver.fancysitula.api.dialogs.types.FS_MultiActionDialog;
@@ -38,18 +38,31 @@ public class DialogImpl extends Dialog {
     private FS_MultiActionDialog buildForPlayer(Player player) {
         List<FS_DialogBody> body = new ArrayList<>();
         for (DialogBodyData bodyData : data.body()) {
-            FS_DialogTextBody fsDialogTextBody = new FS_DialogTextBody(
-                    ChatColorHandler.translate(bodyData.getText(), player, ParserTypes.placeholder()),
-                    bodyData.getClickEvent() != null ? new FS_DialogCustomAction(
-                            bodyData.getClickEvent().getId(),
-                            Map.of(
-                                    "dialog_id", id,
-                                    "text_id", "body"
-                            )
-                    ) : null,
-                    200 // default text width
-            );
-            body.add(fsDialogTextBody);
+             if (bodyData.getItem() != null) {
+
+                FS_DialogItemBody fsDialogTextBody = new FS_DialogItemBody(
+                        new FS_DialogItemBody.ItemStack(bodyData.getItem().getMaterial(), bodyData.getItem().getAmount()),
+                        null,
+                        bodyData.isShowDecorations(),
+                        bodyData.isShowTooltip(),
+                        bodyData.getWidth(),
+                        bodyData.getHeight()
+                );
+                body.add(fsDialogTextBody);
+            } else {
+                FS_DialogTextBody fsDialogTextBody = new FS_DialogTextBody(
+                        ChatColorHandler.translate(bodyData.getText(), player, ParserTypes.placeholder()),
+                        bodyData.getClickEvent() != null ? new FS_DialogCustomAction(
+                                bodyData.getClickEvent().getId(),
+                                Map.of(
+                                        "dialog_id", id,
+                                        "text_id", "body"
+                                )
+                        ) : null,
+                        200 // default text width
+                );
+                body.add(fsDialogTextBody);
+            }
         }
 
         List<FS_DialogInput> inputs = new ArrayList<>();

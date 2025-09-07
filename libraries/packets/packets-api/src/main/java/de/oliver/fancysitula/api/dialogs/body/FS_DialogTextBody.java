@@ -1,12 +1,13 @@
 package de.oliver.fancysitula.api.dialogs.body;
 
 import de.oliver.fancysitula.api.dialogs.actions.FS_DialogCustomAction;
-import net.kyori.adventure.text.event.ClickEvent;
+
+import javax.annotation.Nullable;
 
 public class FS_DialogTextBody implements FS_DialogBody {
 
     private String text;
-    private FS_DialogCustomAction clickEvent;
+    private @Nullable  FS_DialogCustomAction clickEvent;
     private int width;
 
     public FS_DialogTextBody(String text, FS_DialogCustomAction clickEvent, int width) {

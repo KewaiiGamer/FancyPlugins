@@ -2,7 +2,6 @@ package de.oliver.fancysitula.versions.v1_21_6.packets;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.microsoft.aad.msal4j.IClientCertificate;
 import de.oliver.fancysitula.api.dialogs.FS_CommonDialogData;
 import de.oliver.fancysitula.api.dialogs.FS_Dialog;
 import de.oliver.fancysitula.api.dialogs.FS_DialogAction;
@@ -38,12 +37,10 @@ import net.minecraft.server.dialog.body.ItemBody;
 import net.minecraft.server.dialog.body.PlainMessage;
 import net.minecraft.server.dialog.input.*;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.inventory.ClickAction;
-import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
-import org.json.simple.JSONObject;
+import org.bukkit.inventory.ItemStack;
 
-import java.awt.print.Paper;
 import java.util.*;
 
 public class ClientboundShowDialogPacketImpl extends FS_ClientboundShowDialogPacket {
@@ -193,7 +190,7 @@ public class ClientboundShowDialogPacketImpl extends FS_ClientboundShowDialogPac
                         Optional.empty();
 
                 nmsBodies.add(new ItemBody(
-                        CraftItemStack.asNMSCopy(itemBody.getItem()),
+                        CraftItemStack.asNMSCopy(new ItemStack(Material.getMaterial(itemBody.getItem().getMaterial()), Integer.parseInt(itemBody.getItem().getAmount()))),
                         description,
                         itemBody.isShowDecorations(),
                         itemBody.isShowTooltip(),

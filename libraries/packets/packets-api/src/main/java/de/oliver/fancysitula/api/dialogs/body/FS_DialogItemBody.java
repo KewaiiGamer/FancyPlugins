@@ -1,6 +1,5 @@
 package de.oliver.fancysitula.api.dialogs.body;
 
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
 public class FS_DialogItemBody implements FS_DialogBody {
@@ -23,6 +22,20 @@ public class FS_DialogItemBody implements FS_DialogBody {
 
     public ItemStack getItem() {
         return item;
+    }
+    public static class ItemStack {
+        private String material;
+        private String amount;
+        public ItemStack(String material, String amount) {
+            this.material = material;
+            this.amount = amount;
+        }
+        public String getMaterial() {
+            return material;
+        }
+        public String getAmount() {
+            return amount;
+        }
     }
 
     public void setItem(ItemStack item) {
