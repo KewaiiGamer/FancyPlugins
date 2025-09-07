@@ -160,15 +160,12 @@ public class ClientboundShowDialogPacketImpl extends FS_ClientboundShowDialogPac
             if (body instanceof FS_DialogTextBody textBody) {
                 Action action = null;
                 Key key = null;
-                String additions = "nigger";
+                String additions = "empty";
                 if (((FS_DialogTextBody) body).getClickEvent() instanceof FS_DialogCustomAction customAction) {
                     key = Key.key("fancysitula", customAction.getId());
                     ResourceLocation idLocation = PaperAdventure.asVanilla(key);
 
                     if (customAction.getAdditions() != null) {
-                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().toString());
-                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().get("dialog_id"));
-                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().get("text_id"));
                         try {
                             additions = new ObjectMapper().writeValueAsString(customAction.getAdditions());
                         } catch (JsonProcessingException e) {
