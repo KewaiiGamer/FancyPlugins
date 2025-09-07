@@ -11,6 +11,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.common.ServerboundCustomClickActionPacket;
 import net.minecraft.server.level.ServerPlayer;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
@@ -41,6 +42,7 @@ public class PacketListenerImpl extends FS_PacketListener {
             protected void decode(ChannelHandlerContext ctx, Packet<?> msg, List<Object> out) {
                 out.add(msg);
 
+                Bukkit.getLogger().info("found packet " + msg.toString());
                 FS_ServerboundPacket.Type packetType = getPacketType(msg);
                 if (packetType == null) {
                     return; // Unsupported packet type
@@ -77,8 +79,12 @@ public class PacketListenerImpl extends FS_PacketListener {
         switch (type) {
             case CUSTOM_CLICK_ACTION -> {
                 ServerboundCustomClickActionPacket customClickActionPacket = (ServerboundCustomClickActionPacket) packet;
+                Bukkit.getLogger().info(customClickActionPacket.payload().toString());
+                Bukkit.getLogger().info(customClickActionPacket.id().toString());
+                Bukkit.getLogger().info(customClickActionPacket.payload().get().toString());
 
                 Map<String, String> payload = new HashMap<>();
+                payload.put("id", customClickActionPacket.id().toString());
                 if (customClickActionPacket.payload().isPresent() && customClickActionPacket.payload().get().asCompound().isPresent()) {
                     customClickActionPacket.payload().get().asCompound().get().forEach((k, v) -> {
                         if (v.getType().getName().equals(StringTag.TYPE.getName())) {

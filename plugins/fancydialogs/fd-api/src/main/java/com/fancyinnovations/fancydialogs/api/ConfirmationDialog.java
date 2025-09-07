@@ -1,5 +1,6 @@
 package com.fancyinnovations.fancydialogs.api;
 
+import com.fancyinnovations.fancydialogs.api.data.ClickEvent;
 import com.fancyinnovations.fancydialogs.api.data.DialogBodyData;
 import com.fancyinnovations.fancydialogs.api.data.DialogButton;
 import com.fancyinnovations.fancydialogs.api.data.DialogData;
@@ -23,22 +24,25 @@ public class ConfirmationDialog {
     private Dialog dialog;
     private String confirmButtonId;
     private String cancelButtonId;
+    private ClickEvent clickEvent;
     private Runnable onConfirm = () -> {
     };
     private Runnable onCancel = () -> {
     };
 
-    public ConfirmationDialog(String title, String question, String confirmText, String cancelText, Runnable onConfirm, Runnable onCancel) {
+    public ConfirmationDialog(String title, String question, ClickEvent clickEvent, String confirmText, String cancelText, Runnable onConfirm, Runnable onCancel) {
         this.title = title;
         this.question = question;
+        this.clickEvent = clickEvent;
         this.confirmText = confirmText;
         this.cancelText = cancelText;
         this.onConfirm = onConfirm;
         this.onCancel = onCancel;
     }
 
-    public ConfirmationDialog(String question) {
+    public ConfirmationDialog(String question, ClickEvent clickEvent) {
         this.question = question;
+        this.clickEvent = clickEvent;
     }
 
     public ConfirmationDialog withTitle(String title) {
@@ -107,7 +111,7 @@ public class ConfirmationDialog {
                 "confirmation_dialog_" + UUID.randomUUID(),
                 title,
                 false,
-                List.of(new DialogBodyData(question)),
+                List.of(new DialogBodyData(question, clickEvent)),
                 DialogInputs.EMPTY, // TODO add support for confirmation phrases
                 List.of(confirmBtn, cancelBtn)
         );

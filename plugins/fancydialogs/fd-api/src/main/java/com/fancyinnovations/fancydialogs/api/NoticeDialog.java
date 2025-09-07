@@ -1,5 +1,6 @@
 package com.fancyinnovations.fancydialogs.api;
 
+import com.fancyinnovations.fancydialogs.api.data.ClickEvent;
 import com.fancyinnovations.fancydialogs.api.data.DialogBodyData;
 import com.fancyinnovations.fancydialogs.api.data.DialogData;
 import com.fancyinnovations.fancydialogs.api.data.inputs.DialogInputs;
@@ -12,31 +13,33 @@ public class NoticeDialog {
 
     private final String title;
     private final String text;
+    private final ClickEvent clickEvent;
 
     private final DialogData dialogData;
 
-    public NoticeDialog(String title, String text) {
+    public NoticeDialog(String title, String text, ClickEvent clickEvent) {
         this.title = title;
         this.text = text;
+        this.clickEvent = clickEvent;
 
         this.dialogData = new DialogData(
                 "notice_dialog_" + UUID.randomUUID(),
                 this.title,
                 true,
                 List.of(
-                        new DialogBodyData(this.text)
+                        new DialogBodyData(this.text, this.clickEvent)
                 ),
                 DialogInputs.EMPTY,
                 List.of()
         );
     }
 
-    public NoticeDialog(String text) {
-        this("Notice", text);
+    public NoticeDialog(String text, ClickEvent clickEvent) {
+        this("Notice", text, clickEvent);
     }
 
-    public static void show(Player player, String text) {
-        new NoticeDialog(text).show(player);
+    public static void show(Player player, String text, ClickEvent clickEvent) {
+        new NoticeDialog(text, clickEvent).show(player);
     }
 
     public void show(Player player) {

@@ -37,12 +37,12 @@ public class DefaultDialogs {
                 "<u><b><color:#ff7300>Welcome to FancyDialogs!</color></b></u>",
                 false,
                 List.of(
-                        new DialogBodyData("<color:#ffd199><i>The simple and lightweight dialog plugin for your server!<i></color>"),
-                        new DialogBodyData(""),
-                        new DialogBodyData("This dialog is a demonstration of how to use FancyDialogs to create interactive and user-friendly dialogs."),
-                        new DialogBodyData("FancyDialogs supports <rainbow>MiniMessages</rainbow> and PlaceholderAPI"),
-                        new DialogBodyData("Explore more features in the documentation (<click:open_url:'https://docs.fancyinnovations.com/fancyholograms/'><u>click here</u></click>)."),
-                        new DialogBodyData("<gradient:#ff7300:#ffd199:#ff7300>Enjoy using FancyDialogs :D</gradient>")
+                        new DialogBodyData("<color:#ffd199><i>The simple and lightweight dialog plugin for your server!<i></color>", null),
+                        new DialogBodyData("", null),
+                        new DialogBodyData("This dialog is a demonstration of how to use FancyDialogs to create interactive and user-friendly dialogs.", null),
+                        new DialogBodyData("FancyDialogs supports <rainbow>MiniMessages</rainbow> and PlaceholderAPI", null),
+                        new DialogBodyData("Explore more features in the documentation (<click:open_url:'https://docs.fancyinnovations.com/fancyholograms/'><u>click here</u></click>).", null),
+                        new DialogBodyData("<gradient:#ff7300:#ffd199:#ff7300>Enjoy using FancyDialogs :D</gradient>", null)
                 ),
                 new DialogInputs(
                         List.of(
@@ -109,10 +109,10 @@ public class DefaultDialogs {
                 "<b><color:#00ff5e>Welcome to {server_name}!</color></b>",
                 false,
                 List.of(
-                        new DialogBodyData("<color:#a8ffb4><i>The best Minecraft server on earth!<i></color>"),
-                        new DialogBodyData(""),
-                        new DialogBodyData("We are glad to have you here!"),
-                        new DialogBodyData("If you have any questions, feel free to ask our staff members.")
+                        new DialogBodyData("<color:#a8ffb4><i>The best Minecraft server on earth!<i></color>", null),
+                        new DialogBodyData("", null),
+                        new DialogBodyData("We are glad to have you here!", null),
+                        new DialogBodyData("If you have any questions, feel free to ask our staff members.", null)
                 ),
                 DialogInputs.EMPTY,
                 List.of(
@@ -154,7 +154,7 @@ public class DefaultDialogs {
                 "<u><b><color:gold>Quick Actions</color></b></u>",
                 false,
                 List.of(
-                        new DialogBodyData("Here you can quickly access some of the most important features of our server.")
+                        new DialogBodyData("Here you can quickly access some of the most important features of our server.", null)
                 ),
                 DialogInputs.EMPTY,
                 List.of(

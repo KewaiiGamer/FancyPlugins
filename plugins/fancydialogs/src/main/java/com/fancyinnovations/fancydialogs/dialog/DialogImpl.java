@@ -15,6 +15,7 @@ import de.oliver.fancysitula.api.dialogs.actions.FS_CommonButtonData;
 import de.oliver.fancysitula.api.dialogs.actions.FS_DialogActionButton;
 import de.oliver.fancysitula.api.dialogs.actions.FS_DialogCustomAction;
 import de.oliver.fancysitula.api.dialogs.body.FS_DialogBody;
+import de.oliver.fancysitula.api.dialogs.body.FS_DialogClickEvent;
 import de.oliver.fancysitula.api.dialogs.body.FS_DialogTextBody;
 import de.oliver.fancysitula.api.dialogs.inputs.*;
 import de.oliver.fancysitula.api.dialogs.types.FS_MultiActionDialog;
@@ -38,7 +39,14 @@ public class DialogImpl extends Dialog {
         List<FS_DialogBody> body = new ArrayList<>();
         for (DialogBodyData bodyData : data.body()) {
             FS_DialogTextBody fsDialogTextBody = new FS_DialogTextBody(
-                    ChatColorHandler.translate(bodyData.text(), player, ParserTypes.placeholder()),
+                    ChatColorHandler.translate(bodyData.getText(), player, ParserTypes.placeholder()),
+                    bodyData.getClickEvent() != null ? new FS_DialogCustomAction(
+                            bodyData.getClickEvent().getId(),
+                            Map.of(
+                                    "dialog_id", id,
+                                    "text_id", "body"
+                            )
+                    ) : null,
                     200 // default text width
             );
             body.add(fsDialogTextBody);

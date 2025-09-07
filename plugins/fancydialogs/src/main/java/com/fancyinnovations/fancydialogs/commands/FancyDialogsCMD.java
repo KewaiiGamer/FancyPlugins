@@ -47,7 +47,7 @@ public final class FancyDialogsCMD {
             final BukkitCommandActor actor
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to reload the configuration? This will reset all changes made to the config file.")
+            new ConfirmationDialog("Are you sure you want to reload the configuration? This will reset all changes made to the config file.", null)
                     .withTitle("Confirm reload")
                     .withOnConfirm(() -> reloadConfig(actor))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.config.reload.cancelled").send(actor.sender()))
@@ -97,7 +97,7 @@ public final class FancyDialogsCMD {
             final BukkitCommandActor actor
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to load all dialog data from the storage? This will overwrite any existing dialogs.")
+            new ConfirmationDialog("Are you sure you want to load all dialog data from the storage? This will overwrite any existing dialogs.", null)
                     .withTitle("Confirm load")
                     .withOnConfirm(() -> loadStorage(actor))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.storage.load.cancelled").send(actor.sender()))
@@ -127,7 +127,7 @@ public final class FancyDialogsCMD {
             final BukkitCommandActor actor
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to reload all dialog data from the storage? This will clear the dialog registry and overwrite any existing dialogs.")
+            new ConfirmationDialog("Are you sure you want to reload all dialog data from the storage? This will clear the dialog registry and overwrite any existing dialogs.", null)
                     .withTitle("Confirm reload")
                     .withOnConfirm(() -> reloadStorage(actor))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.storage.reload.cancelled").send(actor.sender()))
@@ -182,7 +182,7 @@ public final class FancyDialogsCMD {
             final BukkitCommandActor actor
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to clear the dialog registry? This will remove all registered dialogs.")
+            new ConfirmationDialog("Are you sure you want to clear the dialog registry? This will remove all registered dialogs.", null)
                     .withTitle("Confirm clear")
                     .withOnConfirm(() -> clearRegistry(actor))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.registry.clear.cancelled").send(actor.sender()))
@@ -205,7 +205,7 @@ public final class FancyDialogsCMD {
             final Dialog dialog
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to unregister the dialog with ID '" + dialog.getId() + "'? This will remove it from the registry.")
+            new ConfirmationDialog("Are you sure you want to unregister the dialog with ID '" + dialog.getId() + "'? This will remove it from the registry.", null)
                     .withTitle("Confirm unregister")
                     .withOnConfirm(() -> unregisterDialog(actor, dialog))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.registry.unregister.cancelled").send(actor.sender()))
@@ -232,7 +232,7 @@ public final class FancyDialogsCMD {
             final BukkitCommandActor actor
     ) {
         if (actor.isPlayer()) {
-            new ConfirmationDialog("Are you sure you want to clear the joined players cache?")
+            new ConfirmationDialog("Are you sure you want to clear the joined players cache?", null)
                     .withTitle("Confirm clear")
                     .withOnConfirm(() -> clearJoinedPlayersCache(actor))
                     .withOnCancel(() -> translator.translate("commands.fancydialogs.joined_players_cache.clear.cancelled").send(actor.sender()))

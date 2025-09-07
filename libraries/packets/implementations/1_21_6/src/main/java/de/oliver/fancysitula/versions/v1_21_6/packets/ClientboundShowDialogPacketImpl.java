@@ -1,5 +1,8 @@
 package de.oliver.fancysitula.versions.v1_21_6.packets;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microsoft.aad.msal4j.IClientCertificate;
 import de.oliver.fancysitula.api.dialogs.FS_CommonDialogData;
 import de.oliver.fancysitula.api.dialogs.FS_Dialog;
 import de.oliver.fancysitula.api.dialogs.FS_DialogAction;
@@ -19,6 +22,7 @@ import de.oliver.fancysitula.api.packets.FS_ClientboundShowDialogPacket;
 import de.oliver.fancysitula.versions.v1_21_6.utils.VanillaPlayerAdapter;
 import io.papermc.paper.adventure.PaperAdventure;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
@@ -34,11 +38,13 @@ import net.minecraft.server.dialog.body.ItemBody;
 import net.minecraft.server.dialog.body.PlainMessage;
 import net.minecraft.server.dialog.input.*;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.inventory.ClickAction;
+import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
+import org.json.simple.JSONObject;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.awt.print.Paper;
+import java.util.*;
 
 public class ClientboundShowDialogPacketImpl extends FS_ClientboundShowDialogPacket {
 
@@ -152,8 +158,33 @@ public class ClientboundShowDialogPacketImpl extends FS_ClientboundShowDialogPac
 
         for (FS_DialogBody body : bodies) {
             if (body instanceof FS_DialogTextBody textBody) {
+                Action action = null;
+                Key key = null;
+                String additions = "nigger";
+                if (((FS_DialogTextBody) body).getClickEvent() instanceof FS_DialogCustomAction customAction) {
+                    key = Key.key("fancysitula", customAction.getId());
+                    ResourceLocation idLocation = PaperAdventure.asVanilla(key);
+
+                    if (customAction.getAdditions() != null) {
+                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().toString());
+                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().get("dialog_id"));
+                        Bukkit.getLogger().info("nigger: " + customAction.getAdditions().get("text_id"));
+                        try {
+                            additions = new ObjectMapper().writeValueAsString(customAction.getAdditions());
+                        } catch (JsonProcessingException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                }
+                Map<String, Action.ValueGetter> map = new HashMap<>();
+                net.kyori.adventure.text.Component component = MiniMessage.miniMessage().deserialize(textBody.getText());
+                if (key != null) {
+                    ClickEvent clickEvent = ClickEvent.custom(key, additions);
+                    component = component.clickEvent(clickEvent);
+                }
                 nmsBodies.add(new PlainMessage(
-                        PaperAdventure.asVanilla(MiniMessage.miniMessage().deserialize(textBody.getText())),
+                        PaperAdventure.asVanilla(component),
                         textBody.getWidth()
                 ));
             } else if (body instanceof FS_DialogItemBody itemBody) {

@@ -3,13 +3,20 @@ package com.fancyinnovations.fancydialogs.listener;
 import com.fancyinnovations.fancydialogs.FancyDialogsPlugin;
 import com.fancyinnovations.fancydialogs.api.Dialog;
 import com.fancyinnovations.fancydialogs.api.DialogAction;
+import com.fancyinnovations.fancydialogs.api.data.ClickEvent;
+import com.fancyinnovations.fancydialogs.api.data.DialogBodyData;
 import com.fancyinnovations.fancydialogs.api.data.DialogButton;
 import com.fancyinnovations.fancydialogs.api.events.DialogButtonClickedEvent;
+import com.fancyinnovations.fancydialogs.api.events.DialogTextClickedEvent;
+import com.sun.source.tree.PackageTree;
 import de.oliver.fancysitula.api.packets.FS_ServerboundCustomClickActionPacket;
 import de.oliver.fancysitula.api.packets.FS_ServerboundPacket;
 import de.oliver.fancysitula.api.utils.FS_PacketListener;
 import de.oliver.fancysitula.factories.FancySitula;
+import io.papermc.paper.registry.data.dialog.body.DialogBody;
+import org.bukkit.Bukkit;
 
+import java.util.List;
 import java.util.Map;
 
 public class CustomClickActionPacketListener {
@@ -19,7 +26,7 @@ public class CustomClickActionPacketListener {
     private final FS_PacketListener packetListener;
 
     public CustomClickActionPacketListener() {
-        packetListener = FancySitula.PACKET_LISTENER_FACTORY.createPacketListener(FS_ServerboundPacket.Type.CUSTOM_CLICK_ACTION);
+        packetListener = FancySitula.PACKET_LISTENER_FACTORY.createPacketListener(FS_ServerboundPacket.Type.ALL);
         packetListener.addListener(this::onPacketReceived);
     }
 
@@ -35,9 +42,11 @@ public class CustomClickActionPacketListener {
             return; // Ignore if the packet is not of the expected type
         }
 
-        if (!packet.getId().namespace().equals("fancysitula") && !packet.getId().namespace().equals("fancydialogs_dialog_action")) {
+        /*if (!packet.getId().namespace().equals("fancysitula") && !packet.getId().namespace().equals("fancydialogs_dialog_action")) {
             return; // Ignore packets not related to FancyDialogs
-        }
+        }*/
+        FancyDialogsPlugin.get().getFancyLogger().debug("found packet " + event.packet().getType());
+        FancyDialogsPlugin.get().getFancyLogger().debug("found packet " + event.packet().toString());
 
         packet.getPayload().forEach((key, value) -> {
             FancyDialogsPlugin.get().getFancyLogger().debug("Click action data Key: " + key + " value: " + value.toString());
@@ -45,11 +54,21 @@ public class CustomClickActionPacketListener {
 
         String dialogId = packet.getPayload().get("dialog_id");
         String buttonId = packet.getPayload().get("button_id");
+        String textId = packet.getPayload().get("text_id");
+        FancyDialogsPlugin.get().getFancyLogger().debug("dialogId: " + dialogId + " buttonId: " + buttonId + " textId: " + textId);
+        if (buttonId == null && textId == null) {
+            return;
+        }
 
-        new DialogButtonClickedEvent(event.player(), dialogId, buttonId).callEvent();
-
-        if (dialogId.startsWith("confirmation_dialog_")) {
-            return; // Ignore confirmation dialog actions, handled separately
+        if (buttonId != null ) {
+            new DialogButtonClickedEvent(event.player(), dialogId, buttonId).callEvent();
+            if (dialogId.startsWith("confirmation_dialog_")) {
+                return; // Ignore confirmation dialog actions, handled separately
+            }
+        }
+        if (textId != null ) {
+            String id = packet.getPayload().get("id");
+            new DialogTextClickedEvent(event.player(), dialogId, textId, id).callEvent();
         }
 
         Dialog dialog = FancyDialogsPlugin.get().getDialogRegistry().get(dialogId);
@@ -63,26 +82,36 @@ public class CustomClickActionPacketListener {
             return;
         }
 
-        DialogButton btn = dialog.getData().getButtonById(buttonId);
-        if (btn == null) {
-            FancyDialogsPlugin.get().getFancyLogger().warn("Received action for unknown button: " + buttonId + " in dialog: " + dialogId);
-            return;
-        }
 
-        for (DialogButton.DialogAction btnAction : btn.actions()) {
-            DialogAction action = FancyDialogsPlugin.get().getActionRegistry().getAction(btnAction.name());
-            if (action == null) {
-                FancyDialogsPlugin.get().getFancyLogger().warn("Received action for unknown action: " + btnAction.name() + " in button: " + buttonId);
-                continue;
+        if (buttonId != null) {
+            DialogButton btn = dialog.getData().getButtonById(buttonId);
+            if (btn == null) {
+                FancyDialogsPlugin.get().getFancyLogger().warn("Received action for unknown button: " + buttonId + " in dialog: " + dialogId);
+                return;
             }
 
-            String data = btnAction.data();
-            for (Map.Entry<String, String> entry : packet.getPayload().entrySet()) {
-                data = data.replace("{" + entry.getKey() + "}", entry.getValue());
-            }
+            for (DialogButton.DialogAction btnAction : btn.actions()) {
+                DialogAction action = FancyDialogsPlugin.get().getActionRegistry().getAction(btnAction.name());
+                if (action == null) {
+                    FancyDialogsPlugin.get().getFancyLogger().warn("Received action for unknown action: " + btnAction.name() + " in button: " + buttonId);
+                    continue;
+                }
 
-            action.execute(event.player(), dialog, data);
-        }
+                String data = btnAction.data();
+                for (Map.Entry<String, String> entry : packet.getPayload().entrySet()) {
+                    data = data.replace("{" + entry.getKey() + "}", entry.getValue());
+                }
+
+                action.execute(event.player(), dialog, data);
+            }
+        }  /*else if (textId != null) {
+            List<DialogBodyData> body = dialog.getData().body();
+            for (DialogBodyData bodyData : body) {
+                ClickEvent clickEvent = bodyData.getClickEvent();
+                String data = clickEvent.getAction();
+
+            }
+        }*/
     }
 
     public FS_PacketListener getPacketListener() {

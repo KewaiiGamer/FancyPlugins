@@ -84,7 +84,7 @@ public class FancySitulaCMD extends Command {
                         false,
                         FS_DialogAction.NONE,
                         List.of(
-                                new FS_DialogTextBody("Hello world!", 200)
+                                new FS_DialogTextBody("Hello world!", null, 200)
                         ),
                         List.of(
                                 new FS_DialogInput(
